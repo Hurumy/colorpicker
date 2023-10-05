@@ -23,7 +23,10 @@ main = do
 	playIO window white 10 info testWindow eventHandler stepInfo
 
 testWindow :: Info -> IO Picture
-testWindow i@Info{..} = pure $ pictures[ translate 100 100 $ color (makeColorI _red _green _blue 255) $ circleSolid 50]
+testWindow i@Info{..} = pure $ pictures
+	[ translate 100 100 $ color (makeColorI _red _green _blue 255) $ circleSolid 50
+	, translate (-wWidth/2+10) (-wHeight/2+10) . scale 0.2 0.2 $ text ("Red: " ++ show _red ++ " Green: " ++ show _green ++ " Blue: " ++ show _blue)
+	]
 
 data Info = Info
 	{ _key :: KeyInput
@@ -33,18 +36,18 @@ data Info = Info
 	}
 
 initInfo :: IO Info
-initInfo = pure $ Info {_key = INone, _red = 200, _green = 200, _blue = 100}
+initInfo = pure $ Info {_key = INone, _red = 100, _green = 100, _blue = 100}
 
 
 data KeyInput = IUpR | IDwR | IUpG | IDwG | IUpB | IDwB | INone
 
 changeColor :: KeyInput -> Info -> IO Info
-changeColor IUpR p@Info{..} = pure $ p{ _red = _red + 1 }
-changeColor IDwR p@Info{..} = pure $ p{ _red = _red - 1 }
-changeColor IUpG p@Info{..} = pure $ p{ _green = _green + 1 }
-changeColor IDwG p@Info{..} = pure $ p{ _green = _green - 1 }
-changeColor IUpB p@Info{..} = pure $ p{ _blue = _blue + 1 }
-changeColor IDwB p@Info{..} = pure $ p{ _blue = _blue - 1 }
+changeColor IUpR p@Info{..} = pure $ if _red == 255 then p{ _key = INone } else p{ _red = _red + 1, _key = INone }
+changeColor IDwR p@Info{..} = pure $ p{ _red = _red - 1, _key = INone }
+changeColor IUpG p@Info{..} = pure $ p{ _green = _green + 1, _key = INone }
+changeColor IDwG p@Info{..} = pure $ p{ _green = _green - 1, _key = INone }
+changeColor IUpB p@Info{..} = pure $ p{ _blue = _blue + 1, _key = INone }
+changeColor IDwB p@Info{..} = pure $ p{ _blue = _blue - 1, _key = INone }
 changeColor _ p = pure $ p
 
 {--
