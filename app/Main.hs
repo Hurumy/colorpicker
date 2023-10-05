@@ -42,12 +42,12 @@ initInfo = pure $ Info {_key = INone, _red = 100, _green = 100, _blue = 100}
 data KeyInput = IUpR | IDwR | IUpG | IDwG | IUpB | IDwB | INone
 
 changeColor :: KeyInput -> Info -> IO Info
-changeColor IUpR p@Info{..} = pure $ if _red == 255 then p{ _key = INone } else p{ _red = _red + 1, _key = INone }
-changeColor IDwR p@Info{..} = pure $ p{ _red = _red - 1, _key = INone }
-changeColor IUpG p@Info{..} = pure $ p{ _green = _green + 1, _key = INone }
-changeColor IDwG p@Info{..} = pure $ p{ _green = _green - 1, _key = INone }
-changeColor IUpB p@Info{..} = pure $ p{ _blue = _blue + 1, _key = INone }
-changeColor IDwB p@Info{..} = pure $ p{ _blue = _blue - 1, _key = INone }
+changeColor IUpR p@Info{..} = pure $ if _red == 255 then p else p{ _red = _red + 1 }
+changeColor IDwR p@Info{..} = pure $ if _red == 0 then p else p{ _red = _red - 1 }
+changeColor IUpG p@Info{..} = pure $ if _green == 255 then p else p{ _green = _green + 1 }
+changeColor IDwG p@Info{..} = pure $ if _green == 0 then p else p{ _green = _green - 1 }
+changeColor IUpB p@Info{..} = pure $ if _blue == 255 then p else p{ _blue = _blue + 1 }
+changeColor IDwB p@Info{..} = pure $ if _blue == 0 then p else p{ _blue = _blue - 1 }
 changeColor _ p = pure $ p
 
 {--
@@ -71,6 +71,12 @@ eventHandler e i = case e of
 	EventKey (Char 'b')		Down _ _ -> pure $ i { _key = IDwG }
 	EventKey (Char 'h')		Down _ _ -> pure $ i { _key = IUpB }
 	EventKey (Char 'n')		Down _ _ -> pure $ i { _key = IDwB }
+	EventKey (Char 'f')		Up _ _ -> pure $ i { _key = INone }
+	EventKey (Char 'v')		Up _ _ -> pure $ i { _key = INone }
+	EventKey (Char 'g')		Up _ _ -> pure $ i { _key = INone }
+	EventKey (Char 'b')		Up _ _ -> pure $ i { _key = INone }
+	EventKey (Char 'h')		Up _ _ -> pure $ i { _key = INone }
+	EventKey (Char 'n')		Up _ _ -> pure $ i { _key = INone }
 	_ -> pure i
 
 stepInfo :: Float -> Info -> IO Info
