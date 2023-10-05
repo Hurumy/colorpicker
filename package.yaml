@@ -46,6 +46,8 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - colorpicker
+    - gloss
+
 
 tests:
   colorpicker-test:
