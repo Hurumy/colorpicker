@@ -2,7 +2,6 @@
 
 import Graphics.Gloss
 import Graphics.Gloss.Interface.IO.Game
-import Lib
 
 wWidth, wHeight :: Num a => a
 wWidth  = 640
