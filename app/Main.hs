@@ -17,26 +17,28 @@ cHeight = fromIntegral $ wHeight `div` cSize
 window :: Display
 window = InWindow "ColorPicker" (wWidth, wHeight) (100, 100)
 
-
 main :: IO ()
-main = display window white testWindow
+main = do
+	info <- initInfo
+	display window white $ testWindow info
 
-testWindow :: Picture
-testWindow = pictures[ translate 100 100 $ color (makeColorI 100 100 100 100) $ circleSolid 50]
+testWindow :: Info -> Picture
+testWindow i@Info{..} = pictures[ translate 100 100 $ color (makeColorI _red _green _blue 255) $ circleSolid 50]
 
 data Info = Info
-	{ _color :: PickedColor
-	, _key :: KeyInput
+	{ _key :: KeyInput
+	, _red :: Int
+	, _green :: Int
+	, _blue :: Int
 	}
 
-data PickedColor = PickedColor
-	{ _red :: Int
-	, _blue :: Int
-	, _green :: Int
-	}
+initInfo :: IO Info
+initInfo = pure $ Info {_key = INone, _red = 200, _green = 200, _blue = 100}
+
 
 data KeyInput = IUpR | IDwR | IUpG | IDwG | IUpB | IDwB | INone
 
+{--
 changeColor :: KeyInput -> PickedColor -> PickedColor
 changeColor IUpR p@PickedColor{..} = p{ _red = _red + 1 }
 changeColor IDwR p@PickedColor{..} = p{ _red = _red - 1 }
@@ -44,15 +46,13 @@ changeColor IUpG p@PickedColor{..} = p{ _green = _green + 1 }
 changeColor IDwG p@PickedColor{..} = p{ _green = _green - 1 }
 changeColor IUpB p@PickedColor{..} = p{ _blue = _blue + 1 }
 changeColor IDwB p@PickedColor{..} = p{ _blue = _blue - 1 }
+--}
+
 
 {--
 pickColor :: PickedColor -> Color
 pickColor p@PickedColor{..} = makeColorI _red _green _blue 0
 
-initInfo :: Info
-initInfo =
-	color = PickedColor { _red = 100, _green = 100, _blue = 100 }
-	pure $ Info { _key = INone, _color = color }
 --}
 
 updateWindow :: Info -> IO Picture
