@@ -1,1 +1,2 @@
 # colorpicker
+Haskellの練習
